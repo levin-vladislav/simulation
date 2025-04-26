@@ -1,0 +1,10 @@
+#version 330 core
+in vec2 fragPos;
+in vec2 fragTex;
+uniform sampler2D texture_object;
+out vec4 FragColor;
+
+void main()
+{
+	FragColor = texture(texture_object, fragTex);
+}
