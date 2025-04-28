@@ -54,14 +54,15 @@ void setupVertexAttributes(const VertexFormat& format);
 class Drawable
 {
 private:
-	GLuint vao;
-	GLuint vbo;
 	GLuint _texture;
 	GLuint _shader;
 
 	std::vector<Vertex> _vertices;
 
 public:
+	GLuint vao;
+	GLuint vbo;
+
 	void init(const std::vector<Vertex> vertices, GLuint shader, GLuint texture);
 	void draw();
 	void bindTexture();

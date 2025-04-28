@@ -11,7 +11,6 @@ void Window::init(int w, int h, float x, float y)
     // creating shader
     GLuint shader = createShader("shaders/window.vx", "shaders/window.fg");
 
-
     // creating texture
     GLuint texture;
     glGenTextures(1, &texture);
@@ -38,18 +37,10 @@ void Window::init(int w, int h, float x, float y)
 
 }
 
-void Window::Render()
+void Window::update()
 {
-    beginRender();
-    glClearColor(r, g, b, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    endRender();
-}
-
-void Window::RenderToScreen()
-{
-    window_object.update();
-    window_object.draw();
+    Render();
+    RenderToScreen();
 }
 
 void Window::SetColor(float red, float green, float blue)
@@ -75,4 +66,19 @@ void Window::beginRender()
 void Window::endRender() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, 800, 600);
+}
+
+void Window::Render()
+{
+    beginRender();
+    glClearColor(r, g, b, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    // rendering objects
+    endRender();
+}
+
+void Window::RenderToScreen()
+{
+    window_object.update();
+    window_object.draw();
 }

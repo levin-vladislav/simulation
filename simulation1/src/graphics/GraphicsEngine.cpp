@@ -3,6 +3,8 @@
 
 void GraphicsEngine::init()
 {
+
+	glewInit();
 	// Cathcing exceptions
 	if (!glfwInit()) {
 		std::cerr << "Failed to initialize GLFW\n";
@@ -19,9 +21,6 @@ void GraphicsEngine::init()
 
 	// Creating GL context
 	glfwMakeContextCurrent(window);
-	glewInit();
-	
-	glEnable(GL_TEXTURE_2D);
 
 	// Initializing multi-windows
 	initWindows();
@@ -51,12 +50,13 @@ bool GraphicsEngine::update()
 	// Updates screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// Use shader
+	glUseProgram(shader);
+
 	// rendering multi-windows
 	for (const std::pair<std::string, Window>& pair : windows)
 	{
-		windows[pair.first].Render();
-		windows[pair.first].RenderToScreen();
-
+		windows[pair.first].update();
 	}
 
 	// Checking events

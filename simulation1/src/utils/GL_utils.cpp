@@ -57,13 +57,17 @@ void Drawable::draw()
 {
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, _vertices.size());
+	glBindVertexArray(0);
 }
 
 void Drawable::bindTexture()
 {
+	glUseProgram(_shader);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture);
 	updateUniform("texture_object", _texture);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 }
 
@@ -111,8 +115,6 @@ void Drawable::updateUniforms(std::unordered_map<std::string, UniformValue> onet
 
 void Drawable::update()
 {
-	glUseProgram(_shader);
-	glBindTexture(GL_TEXTURE_2D, _texture);
 }
 
 void Drawable::destroy()
