@@ -12,6 +12,7 @@ private:
 
 public:
 	void init();
+	void initWindows();
 	bool update();
 	void destroy();
 };

@@ -3,11 +3,13 @@
 
 void GraphicsEngine::init()
 {
+	// Cathcing exceptions
 	if (!glfwInit()) {
 		std::cerr << "Failed to initialize GLFW\n";
 		return;
 	}
 
+	// Initializing main window
 	window = glfwCreateWindow(800, 600, "Simulation", NULL, NULL);
 	if (!window) {
 		std::cerr << "Failed to create GLFW window\n";
@@ -15,6 +17,20 @@ void GraphicsEngine::init()
 		return;
 	}
 
+	// Creating GL context
+	glfwMakeContextCurrent(window);
+	glewInit();
+	
+	glEnable(GL_TEXTURE_2D);
+
+	// Initializing multi-windows
+	initWindows();
+
+	std::cout << "GraphicsEngine initialized.\n";
+}
+
+void GraphicsEngine::initWindows()
+{
 	Window redWin, blueWin;
 
 	redWin.init(50, 50, 0.1f, 0.1f);
@@ -25,20 +41,17 @@ void GraphicsEngine::init()
 
 	windows["Red Window"] = redWin;
 	windows["Blue Window"] = blueWin;
-
-
-	glfwMakeContextCurrent(window);
-	glewInit();
-
-	glEnable(GL_TEXTURE_2D);
-	std::cout << "GraphicsEngine initialized.\n";
 }
 
 bool GraphicsEngine::update()
 {
+	// Binding main FBO
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Updates screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// rendering
+	// rendering multi-windows
 	for (const std::pair<std::string, Window>& pair : windows)
 	{
 		windows[pair.first].Render();
@@ -46,6 +59,7 @@ bool GraphicsEngine::update()
 
 	}
 
+	// Checking events
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 
@@ -61,11 +75,14 @@ bool GraphicsEngine::update()
 
 void GraphicsEngine::destroy()
 {
+	// destroying multi-windows
 	for (const std::pair<std::string, Window>& pair : windows)
 	{
 		windows[pair.first].destroy();
 
 	}
+
+	// destroying context
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	std::cout << "GraphicsEngine destroyed!\n";

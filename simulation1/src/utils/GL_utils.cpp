@@ -25,21 +25,46 @@ void setupVertexAttributes(const VertexFormat& format) {
 
 void Drawable::init(const std::vector<Vertex> vertices, GLuint shader, GLuint texture)
 {
+	// Saving values
 	_vertices = vertices;
 	_shader = shader;
 	_texture = texture;
 
+	// Creating and binding VAO and VBO of object
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_STATIC_DRAW);
 
+	// Setup of vertices
 	setupVertexAttributes(vertex_format);
 
+	// Logout of vertices
+	for (Vertex vertex : vertices)
+	{
+		std::cout << vertex.coord.x << ' ' << vertex.coord.y << std::endl;
+		std::cout << vertex.tex_coord.x << ' ' << vertex.tex_coord.y << std::endl;
+	}
+
+	// Enabling some functions
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+}
+
+void Drawable::draw()
+{
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, _vertices.size());
+}
+
+void Drawable::bindTexture()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _texture);
+	updateUniform("texture_object", _texture);
+
 }
 
 void Drawable::updateUniform(std::string name, UniformValue value)
@@ -64,6 +89,8 @@ void Drawable::updateUniform(std::string name, UniformValue value)
 			glUniform4fv(location, 1, &v[0]);
 		else if constexpr (std::is_same_v<T, glm::mat4>)
 			glUniformMatrix4fv(location, 1, GL_FALSE, &v[0][0]);
+		else if constexpr (std::is_same_v<T, GLuint>)
+			glUniform1i(location, v);
 		else
 		{
 			std::cerr << "Unexpected type was given in uniform.";
@@ -81,11 +108,6 @@ void Drawable::updateUniforms(std::unordered_map<std::string, UniformValue> onet
 	}
 }
 
-void Drawable::draw()
-{
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, _vertices.size());
-}
 
 void Drawable::update()
 {

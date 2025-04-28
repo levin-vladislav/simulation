@@ -45,6 +45,7 @@ struct Vertex
 {
 	glm::vec2 coord;
 	glm::vec2 tex_coord;
+
 };
 
 
@@ -63,6 +64,7 @@ private:
 public:
 	void init(const std::vector<Vertex> vertices, GLuint shader, GLuint texture);
 	void draw();
+	void bindTexture();
 	void updateUniform(std::string name, UniformValue value);
 	void updateUniforms(std::unordered_map<std::string, UniformValue> uniforms);
 
