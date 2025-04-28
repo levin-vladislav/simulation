@@ -9,7 +9,6 @@ class GraphicsEngine
 private:
 	GLFWwindow* window;
 	std::unordered_map<std::string, Window> windows;
-	GLuint shader;
 
 public:
 	void init();

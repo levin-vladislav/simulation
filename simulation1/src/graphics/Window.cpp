@@ -9,10 +9,9 @@ void Window::init(int w, int h, float x, float y)
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     // creating shader
-    GLuint shader = createShader("shaders/window.vx", "shaders/window.fg");
+    shader = createShader("shaders/window.vx", "shaders/window.fg");
 
     // creating texture
-    GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
@@ -31,7 +30,7 @@ void Window::init(int w, int h, float x, float y)
 
     // Creating Drawable object with window texture
     window_object = Drawable();
-    const std::vector<Vertex> vertices = getRectangleVertices(x, y, 0.1, 0.1);
+    const std::vector<Vertex> vertices = getRectangleVertices(x, y, 0.1f, 0.1f);
     window_object.init(vertices, shader, texture);
     window_object.bindTexture();
 
@@ -60,7 +59,6 @@ void Window::beginRender()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Window::endRender() {
@@ -70,9 +68,12 @@ void Window::endRender() {
 
 void Window::Render()
 {
-    beginRender();
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glViewport(0, 0, width, height);
     glClearColor(r, g, b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, 800, 600);
     // rendering objects
     endRender();
 }

@@ -55,6 +55,8 @@ void Drawable::init(const std::vector<Vertex> vertices, GLuint shader, GLuint te
 
 void Drawable::draw()
 {
+	glUseProgram(_shader);
+	glBindTexture(GL_TEXTURE_2D, _texture);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, _vertices.size());
 	glBindVertexArray(0);
@@ -62,8 +64,8 @@ void Drawable::draw()
 
 void Drawable::bindTexture()
 {
-	glUseProgram(_shader);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glUseProgram(_shader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture);
 	updateUniform("texture_object", _texture);
@@ -115,6 +117,7 @@ void Drawable::updateUniforms(std::unordered_map<std::string, UniformValue> onet
 
 void Drawable::update()
 {
+	
 }
 
 void Drawable::destroy()

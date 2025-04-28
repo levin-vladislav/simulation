@@ -3,6 +3,7 @@
 struct Window
 {
 private:
+	GLuint texture, shader;
 	int width, height;
 	float r, g, b;
 	void beginRender();
