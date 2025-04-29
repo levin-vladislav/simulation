@@ -68,7 +68,7 @@ void Drawable::bindTexture()
 	glUseProgram(_shader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture);
-	updateUniform("texture_object", _texture);
+	//updateUniform("texture_object", 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 }

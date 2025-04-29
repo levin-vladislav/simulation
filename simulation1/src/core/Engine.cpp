@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Engine.h"
+#include <stdlib.h>
 
 void Engine::init() {
+	system("cls");
 	std::cout << "Initialized.\n";
 	graphicsEngine = GraphicsEngine();
 	graphicsEngine.init();

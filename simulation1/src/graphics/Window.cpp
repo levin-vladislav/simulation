@@ -3,13 +3,11 @@
 
 void Window::init(int w, int h, float x, float y)
 {
-    // creating FBO
+    std::cout << "Window initializing started" << std::endl;
     width = w; height = h;
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     // creating shader
-    shader = createShader("shaders/window.vx", "shaders/window.fg");
+    shader = createShader("D:/VisualStudioProjects/simulation1/simulation1/shaders/window.vx", "D:/VisualStudioProjects/simulation1/simulation1/shaders/window.fg");
 
     // creating texture
     glGenTextures(1, &texture);
@@ -17,6 +15,10 @@ void Window::init(int w, int h, float x, float y)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // creating FBO
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     
     // Binding FBO to texture
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
@@ -24,6 +26,8 @@ void Window::init(int w, int h, float x, float y)
     // Checks if FBO was created successfully
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cerr << "Framebuffer not complete!\n";
+
+    std::cout << "FBO: " << fbo << std::endl;
 
     // Returning to main FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -58,6 +62,7 @@ void Window::destroy()
 void Window::beginRender()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glClear(GL_COLOR_BUFFER_BIT);
     glViewport(0, 0, width, height);
 }
 
